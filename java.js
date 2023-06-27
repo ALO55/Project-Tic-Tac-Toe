@@ -4,13 +4,14 @@ const Gameboard = (() =>{
     const render = () => {
         let boardHTML = "";
         gameboard.forEach((square, index) => {
-            boardHTML += document.createElement('div')
+            boardHTML = document.createElement('div')
             boardHTML.classList.add('square');
             boardHTML.setAttribute('id', `${index}`)
-            boardHTML.innerHTML = `${square}`
+
+            document.querySelector('#gameboard').appendChild(boardHTML);
         })
 
-        document.querySelector('#gameboard').appendChild(boardHTML);
+        
     };
 
     
@@ -31,7 +32,7 @@ const createPlayer = (name, mark) => {
 const game = (() => {
     let players = [];
     let playerIndex;
-    let gameover; 
+    let gameOver; 
 
     const start = () => {
         players = [
@@ -39,12 +40,17 @@ const game = (() => {
             createPlayer(document.querySelector('#player2').value, "O")
         ]
         playerIndex = 0;
-        gameover = false;
+        gameOver = false;
+        Gameboard.render();
+    }
+
+    return{
+        start
     }
 })();
 
 
 const startBtn = document.querySelector('#start-btn');
 startBtn.addEventListener('click', () => {
-     
+    game.start();
 })
