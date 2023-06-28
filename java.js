@@ -1,10 +1,10 @@
 //This module creates the board game 
 const Gameboard = (() =>{
-    let gameboard = ["", "", "", "", "", "", "", "", ""];
+    let board = ["", "", "", "", "", "", "", "", ""];
     let boardHTML = "";
 
     const render = () => {
-        gameboard.forEach((square, index) => {
+        board.forEach((square, index) => {
             boardHTML = document.createElement('div')
             boardHTML.classList.add('square');
             boardHTML.setAttribute('id', `${index}`)
@@ -13,7 +13,7 @@ const Gameboard = (() =>{
     }
 
     const cleanBoard = () => {
-        gameboard.forEach( () => {
+        board.forEach( () => {
             document.querySelector('#gameboard').textContent = "";
         })
 
@@ -21,7 +21,8 @@ const Gameboard = (() =>{
 
     return {
         render,
-        cleanBoard
+        cleanBoard,
+        boardHTML
     }
 
 })();
@@ -37,6 +38,16 @@ const game = (() => {
     let players = [];
     let playerIndex;
     let gameOver; 
+    const winningCombinations = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ] 
 
     const start = () => {
         players = [
@@ -54,16 +65,32 @@ const game = (() => {
                     return;
                 }
                 box.textContent = `${players[playerIndex].mark}`;
+                //check for win
+                if (checkWin(box.textContent)) {
+                    gameOver = true;
+                    alert(`${players[playerIndex].name} won!`);
+                }
                 //change the mark for the players
                 playerIndex = playerIndex === 0 ? 1 : 0;
             });
         })
+        //Loop through each array of the winning combinations 
+        function checkWin(mark) {
+            return winningCombinations.some(combination => {
+                return combination.every( index => {
+                    return square[index].textContent.includes(mark)
+                })
+            })
+        }
+
     }
 
     const restart = () => {
         Gameboard.cleanBoard();
         start();
     }
+
+
 
     return{
         start,
@@ -79,4 +106,5 @@ restartBtn.addEventListener('click', () => {
 const startBtn = document.querySelector('#start-btn');
 startBtn.addEventListener('click', () => {
     game.start();
+    startBtn.disabled = true;
 })
