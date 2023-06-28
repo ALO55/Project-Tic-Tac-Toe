@@ -14,10 +14,17 @@
 
 
 .square {
+    display: flex;
     border: 1px solid black;
-    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 80px;
     height: 100px;
     width: 100px;
+}
+
+.square:hover {
+    cursor: pointer;
 }
 
 .square:first-child,

@@ -43,8 +43,12 @@ const game = (() => {
         const square = document.querySelectorAll('.square');
         square.forEach((box) => {
             box.addEventListener('click', () => {
-                console.log('hello')
+                if(box.textContent !== ""){
+                    return;
+                }
                 box.textContent = `${players[playerIndex].mark}`;
+                //change the mark for the players
+                playerIndex = playerIndex === 0 ? 1 : 0;
             });
         })
     }
