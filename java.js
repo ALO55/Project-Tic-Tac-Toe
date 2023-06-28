@@ -1,9 +1,9 @@
 //This module creates the board game 
 const Gameboard = (() =>{
     let gameboard = ["", "", "", "", "", "", "", "", ""];
+    let boardHTML = "";
 
     const render = () => {
-        let boardHTML = "";
         gameboard.forEach((square, index) => {
             boardHTML = document.createElement('div')
             boardHTML.classList.add('square');
@@ -12,9 +12,16 @@ const Gameboard = (() =>{
         })
     }
 
+    const cleanBoard = () => {
+        gameboard.forEach( () => {
+            document.querySelector('#gameboard').textContent = "";
+        })
+
+    }
 
     return {
         render,
+        cleanBoard
     }
 
 })();
@@ -53,12 +60,21 @@ const game = (() => {
         })
     }
 
+    const restart = () => {
+        Gameboard.cleanBoard();
+        start();
+    }
 
     return{
         start,
+        restart
     }
 })();
 
+const restartBtn = document.querySelector('#restart-btn');
+restartBtn.addEventListener('click', () => {
+    game.restart();
+})
 
 const startBtn = document.querySelector('#start-btn');
 startBtn.addEventListener('click', () => {
