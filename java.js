@@ -1,3 +1,4 @@
+//This module creates the board game 
 const Gameboard = (() =>{
     let gameboard = ["", "", "", "", "", "", "", "", ""];
 
@@ -7,28 +8,24 @@ const Gameboard = (() =>{
             boardHTML = document.createElement('div')
             boardHTML.classList.add('square');
             boardHTML.setAttribute('id', `${index}`)
-
             document.querySelector('#gameboard').appendChild(boardHTML);
         })
+    }
 
-        
-    };
-
-    
 
     return {
         render,
     }
 
 })();
-
+//Using factory function for the players
 const createPlayer = (name, mark) => {
     return{
         name,
         mark
     }
 }
-
+//Using the module pattern to start the game
 const game = (() => {
     let players = [];
     let playerIndex;
@@ -42,10 +39,19 @@ const game = (() => {
         playerIndex = 0;
         gameOver = false;
         Gameboard.render();
+        //check where the user is clicking 
+        const square = document.querySelectorAll('.square');
+        square.forEach((box) => {
+            box.addEventListener('click', () => {
+                console.log('hello')
+                box.textContent = `${players[playerIndex].mark}`;
+            });
+        })
     }
 
+
     return{
-        start
+        start,
     }
 })();
 
