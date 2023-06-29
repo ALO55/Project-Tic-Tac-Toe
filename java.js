@@ -22,7 +22,6 @@ const Gameboard = (() =>{
     return {
         render,
         cleanBoard,
-        boardHTML
     }
 
 })();
@@ -69,9 +68,14 @@ const game = (() => {
                 if (checkWin(box.textContent)) {
                     gameOver = true;
                     alert(`${players[playerIndex].name} won!`);
-                }
+                }  
                 //change the mark for the players
                 playerIndex = playerIndex === 0 ? 1 : 0;
+
+                if (checkDraw()){
+                    gameOver = true;
+                    alert("It's a tie");
+                }
             });
         })
         //Loop through each array of the winning combinations 
@@ -79,18 +83,23 @@ const game = (() => {
             return winningCombinations.some(combination => {
                 return combination.every( index => {
                     return square[index].textContent.includes(mark)
+                    
                 })
             })
         }
 
+        //check if every square is fill
+        function checkDraw () {
+            return [...square].every(cell => {
+                return cell.textContent.includes("X") || cell.textContent.includes("O");
+            })
+        }
     }
 
     const restart = () => {
         Gameboard.cleanBoard();
         start();
     }
-
-
 
     return{
         start,
