@@ -16,7 +16,6 @@ const Gameboard = (() =>{
         board.forEach( () => {
             document.querySelector('#gameboard').textContent = "";
         })
-
     }
 
     return {
@@ -25,6 +24,29 @@ const Gameboard = (() =>{
     }
 
 })();
+//module for displaying a message 
+const showMessage = (() => {
+    let popup = document.querySelector('#popup');
+    const closeBtn = document.querySelector('#close-btn');
+
+    const renderMessage = (message) => {
+       document.querySelector('#message').textContent = message; 
+    }
+
+    const openPopup = () => {
+        popup.classList.add('open-popup');
+    }
+
+    closeBtn.addEventListener('click', () => {
+        popup.classList.remove('open-popup');
+    })
+
+    return {
+        renderMessage,
+        openPopup
+    }
+})();
+
 //Using factory function for the players
 const createPlayer = (name, mark) => {
     return{
@@ -60,22 +82,32 @@ const game = (() => {
         const square = document.querySelectorAll('.square');
         square.forEach((box) => {
             box.addEventListener('click', () => {
+                //stop the game 
+                if (gameOver === true) {
+                    return
+                }
+                //code to not rewrite the mark
                 if(box.textContent !== ""){
                     return;
                 }
+                //add the mark inside the box
                 box.textContent = `${players[playerIndex].mark}`;
-                //check for win
+
                 if (checkWin(box.textContent)) {
                     gameOver = true;
-                    alert(`${players[playerIndex].name} won!`);
-                }  
+                    showMessage.renderMessage(`${players[playerIndex].name} won!`);
+                    showMessage.openPopup();
+                } 
+                else if (checkDraw()){
+                    gameOver = true;
+                    showMessage.renderMessage("It's a draw");
+                    showMessage.openPopup();
+                }
+
                 //change the mark for the players
                 playerIndex = playerIndex === 0 ? 1 : 0;
 
-                if (checkDraw()){
-                    gameOver = true;
-                    alert("It's a tie");
-                }
+
             });
         })
         //Loop through each array of the winning combinations 
@@ -96,8 +128,13 @@ const game = (() => {
         }
     }
 
+    function openPopup(){
+
+    }
+
     const restart = () => {
         Gameboard.cleanBoard();
+        showMessage.renderMessage("");
         start();
     }
 
@@ -112,8 +149,11 @@ restartBtn.addEventListener('click', () => {
     game.restart();
 })
 
+restartBtn.disabled = true;
+
 const startBtn = document.querySelector('#start-btn');
 startBtn.addEventListener('click', () => {
     game.start();
     startBtn.disabled = true;
+    restartBtn.disabled = false;
 })
